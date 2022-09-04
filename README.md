@@ -11,15 +11,15 @@ as provides protection against brute force crawling of all resources.
 ## Example Usage
 
 ```go
-	prefix := "user"
-	key := []byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+prefix := "user"
+key := []byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
 
-	et, err := extid.NewType(prefix, key)
-	if err != nil {
-		return err
-	}
+et, err := extid.NewType(prefix, key)
+if err != nil {
+  return err
+}
 
-  et.Encode(1) // => "user_13189a6ae4ab07ae70a3aabd30be99de"
+et.Encode(1) // => "user_13189a6ae4ab07ae70a3aabd30be99de"
 ```
 
 ## Performance
