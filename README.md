@@ -1,3 +1,5 @@
+[![Go Reference](https://pkg.go.dev/badge/github.com/jackc/go-extid.svg)](https://pkg.go.dev/github.com/jackc/go-extid)
+
 # go-extid
 
 It can be valuable to internally use a serial integer as an ID without revealing that ID to the outside world. go-extid
