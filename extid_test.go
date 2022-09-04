@@ -1,6 +1,7 @@
 package extid_test
 
 import (
+	"fmt"
 	"math"
 	"strings"
 	"testing"
@@ -84,4 +85,73 @@ func FuzzEncodeDecode(f *testing.F) {
 		require.NoError(t, err)
 		require.Equal(t, id, roundTripID)
 	})
+}
+
+var benchXID string
+
+func BenchmarkEncode(b *testing.B) {
+	prefix := "user"
+	key := []byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+
+	et, err := extid.NewType(prefix, key)
+	require.NoError(b, err)
+
+	b.ResetTimer()
+	var xid string
+	for i := 0; i < b.N; i++ {
+		xid = et.Encode(int64(i))
+	}
+
+	benchXID = xid
+}
+
+var benchID int64
+
+func BenchmarkDecode(b *testing.B) {
+	prefix := "user"
+	key := []byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+
+	et, err := extid.NewType(prefix, key)
+	require.NoError(b, err)
+
+	xids := make([]string, b.N)
+	for i := 0; i < b.N; i++ {
+		xids[i] = et.Encode(int64(i))
+	}
+
+	b.ResetTimer()
+	var id int64
+	for i := 0; i < b.N; i++ {
+		id, err = et.Decode(xids[i])
+		if err != nil {
+			b.Fatalf("et.Decode failed: i: %d; err: %v", i, err)
+		}
+		if id != int64(i) {
+			b.Fatalf("et.Decode should have been %d but got %d", i, id)
+		}
+	}
+
+	benchID = id
+}
+
+func ExampleType_Encode() {
+	prefix := "user"
+	key := []byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+
+	et, err := extid.NewType(prefix, key)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for i := 0; i < 5; i++ {
+		fmt.Println(i, et.Encode(int64(i)))
+	}
+
+	// Output:
+	// 0 user_c6a13b37878f5b826f4f8162a1c8d879
+	// 1 user_13189a6ae4ab07ae70a3aabd30be99de
+	// 2 user_c76e8fcf7ad0fe9b39e083739cbe26c2
+	// 3 user_90cb45611c3105c84624b2ac12cb5b74
+	// 4 user_79d0782401799c8fd25121e869b5b532
 }
