@@ -3,6 +3,9 @@
 It can be valuable to internally use a serial integer as an ID without revealing that ID to the outside world. go-extid
 uses AES-128 to convert to and from an external ID that cannot feasibly be decoded without the secret key.
 
+This prevents outsiders from quantifying the usage of your application by observing the rate of increase of IDs as well
+as provides protection against brute force crawling of all resources.
+
 ## Example Usage
 
 ```go
