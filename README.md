@@ -39,3 +39,4 @@ ok  	github.com/jackc/go-extid	5.298s
 ## Other Implementations
 
 * [PostgreSQL](https://github.com/jackc/pg-extid)
+* [Ruby](https://github.com/jackc/ruby-extid)
